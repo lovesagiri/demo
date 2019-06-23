@@ -15,19 +15,12 @@ public class TimeServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-        byte[] request = new byte[buf.readableBytes()];
-        buf.readBytes(request);
-        String body = new String(request,"UTF-8");
+        String body = (String) msg;
         System.out.println("time server receivc msg " + body);
         String curtime = body.equalsIgnoreCase("sagiri") ? "03.27" : "00:00";
+        curtime = curtime +"$_";
         ByteBuf response = Unpooled.copiedBuffer(curtime.getBytes());
-        ctx.write(response);
-    }
-
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
+        ctx.writeAndFlush(response);
     }
 
     @Override

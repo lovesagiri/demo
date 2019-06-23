@@ -21,25 +21,29 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
     private static final Logger logger = Logger
             .getLogger(TimeClientHandler.class.getName());
 
-    private final ByteBuf firstmessage;
+   // private final ByteBuf firstmessage;
+    private int counter;
+    private String message ="sagiri"+"$_";
 
     public TimeClientHandler(){
-        byte[] request = "sagiri".getBytes();
+       /* byte[] request = "sagiri".getBytes();
         firstmessage = Unpooled.buffer(request.length);
-        firstmessage.writeBytes(request);
+        firstmessage.writeBytes(request);*/
     }
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(firstmessage);
+        for (int i = 0; i < 10; i++)
+        ctx.writeAndFlush(Unpooled.copiedBuffer(message.getBytes()));
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
+       /* ByteBuf buf = (ByteBuf) msg;
         byte[] request = new byte[buf.readableBytes()];
         buf.readBytes(request);
-        String body = new String(request,"UTF-8");
-        System.out.println("time client now is  " + body);
+        String body = new String(request,"UTF-8");*/
+       String body = (String) msg;
+       System.out.println("客户端收到的第："+ ++counter + "  条消息！");
     }
 
     @Override
