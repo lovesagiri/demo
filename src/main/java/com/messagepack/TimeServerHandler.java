@@ -24,6 +24,8 @@ public class TimeServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        System.out.println("服务器收到的消息：" + cause.getMessage());
+        cause.printStackTrace();
         ctx.close();
     }
 

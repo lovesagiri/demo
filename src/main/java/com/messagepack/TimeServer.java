@@ -35,7 +35,14 @@ public class TimeServer {
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG,1024)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ChildChannelHandler());
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            socketChannel.pipeline().addLast("msg encoder",new MessagePackEncoder());
+                            socketChannel.pipeline().addLast("msg decoder",new MessagePackDecoder());
+                            socketChannel.pipeline().addLast(new TimeServerHandler());
+                        }
+                    });
 
             ChannelFuture cf = sb.bind(port).sync();
 
@@ -46,18 +53,8 @@ public class TimeServer {
         }
 
     }
-
-    private class ChildChannelHandler extends ChannelInitializer<SocketChannel>{
-
-        @Override
-        protected void initChannel(SocketChannel socketChannel) throws Exception {
-            socketChannel.pipeline().addLast("msg encoder",new MessagePackEncoder());
-            socketChannel.pipeline().addLast("msg decoder",new MessagePackDecoder());
-            socketChannel.pipeline().addLast(new TimeServerHandler());
-        }
-    }
     public static void main( String[] args ) throws Exception {
-        int port = 8088;
+        int port = 9090;
         new TimeServer().bind(port);
     }
 }

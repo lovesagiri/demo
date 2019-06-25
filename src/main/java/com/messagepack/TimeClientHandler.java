@@ -25,9 +25,8 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         User[] users = arrayUser();
         for (User user:users){
-            ctx.write(user);
+            ctx.writeAndFlush(user);
         }
-        ctx.flush();
     }
 
     private User[] arrayUser() {
