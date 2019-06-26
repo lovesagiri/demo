@@ -40,6 +40,8 @@ public class EchoClient {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             //注意：1、此处利用netty解决粘包时，自定义的编解码器，一定要放在"最后"
+                            //此处解决粘包的原理是：首先利用netty的编解码器先划分完整消息报，然后再利用自定义的编解码器
+                            //去转译消息，所以就产生了顺序问题
                             socketChannel.pipeline().addLast("frameEncoder", new LengthFieldPrepender(2));
                             socketChannel.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(65535, 0,2,0,2));
                             //自定义编解码器
