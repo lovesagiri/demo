@@ -33,10 +33,19 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(65535, 0,2,0,2));
-                            socketChannel.pipeline().addLast("msgpack decode", new MsgpackDecoder());
+                            //注意：1、此处利用netty解决粘包时，自定义的编解码器，一定要放在最后
                             socketChannel.pipeline().addLast("frameEncoder", new LengthFieldPrepender(2));
+                            socketChannel.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(65535, 0,2,0,2));
+                            //自定义编解码器
+                            socketChannel.pipeline().addLast("msgpack decode", new MsgpackDecoder());
                             socketChannel.pipeline().addLast("msgpack encode", new MsgpackEncoder());
+                            //2、也可以编码与解码乱序 例如
+                            /*socketChannel.pipeline().addLast("frameEncoder", new LengthFieldPrepender(2));
+                            //自定义编解码器
+                            socketChannel.pipeline().addLast("msgpack encode", new MsgpackEncoder());
+                            socketChannel.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(65535, 0,2,0,2));
+                            //自定义编解码器
+                            socketChannel.pipeline().addLast("msgpack decode", new MsgpackDecoder());*/
                             socketChannel.pipeline().addLast(new EchoServerHandler());
                         }
                     });

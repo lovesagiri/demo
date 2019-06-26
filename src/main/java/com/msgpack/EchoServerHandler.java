@@ -16,7 +16,6 @@ public class EchoServerHandler extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 打印接收到的消息
         List<Object> list = (List<Object>)msg;
-        System.out.println(list);
         System.out.println("服务端收到客户端发来的消息是：" + list);
         ctx.writeAndFlush(list);
     }
