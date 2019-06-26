@@ -39,7 +39,7 @@ public class EchoClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            //注意：1、此处利用netty解决粘包时，自定义的编解码器，一定要放在最后
+                            //注意：1、此处利用netty解决粘包时，自定义的编解码器，一定要放在"最后"
                             socketChannel.pipeline().addLast("frameEncoder", new LengthFieldPrepender(2));
                             socketChannel.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(65535, 0,2,0,2));
                             //自定义编解码器
