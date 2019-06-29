@@ -29,7 +29,12 @@ public class EchoServer {
             bootstrap.group(groupBig,groupSmall)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG,1024)
+                    //此处的handeler将保存在父类（AbstractBootstrap）的hangdelr（是个工厂类）中，
+                    // 他会给每个连接进来的客户端通道创建一个新的handler（每人一个）
+                    //即给每个客户端通道使用的
                     .handler(new LoggingHandler(LogLevel.INFO))
+                    //此处的handeler将保存在ServerBootstrap的childhandler中，给服务端使用，所有连接的客户端通道都会使用他
+                    //(所有人都用同一个)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
