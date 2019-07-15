@@ -3,6 +3,8 @@ package com.msgpack;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.Arrays;
+
 /**
  * @Description TODO
  * @Author by yangzhengyang
@@ -21,16 +23,14 @@ public class EchoClientHandler extends ChannelHandlerAdapter {
         // 获取一个填充好数据的数组
         User[] user = User();
         // 遍历这个数组，
-        for (User user1 : user) {
-            ctx.writeAndFlush(user1);
-        }
+        Arrays.stream(user).forEach(ctx::writeAndFlush);
     }
 
     private User[] User(){
         // 创建一个user数组
         User[] users = new User[sendNumber];
         User user = null;
-        for (int i = 0; i < sendNumber; i++) {
+        for (int i = sendNumber - 1; i >= 0; i--) {
             user = new User();
             user.setAge(i);
             user.setName("mqs" + i);
