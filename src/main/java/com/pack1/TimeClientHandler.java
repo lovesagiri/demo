@@ -9,6 +9,7 @@ import io.netty.channel.ChannelHandlerInvoker;
 import io.netty.util.concurrent.EventExecutorGroup;
 
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 /**
  * @Description TODO
@@ -32,8 +33,7 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
     }
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        for (int i = 0; i < 10; i++)
-        ctx.writeAndFlush(Unpooled.copiedBuffer(message.getBytes()));
+        IntStream.range(0, 10).mapToObj(i -> Unpooled.copiedBuffer(message.getBytes())).forEachOrdered(ctx::writeAndFlush);
     }
 
     @Override
