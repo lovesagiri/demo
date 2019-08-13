@@ -12,6 +12,11 @@ import org.msgpack.annotation.Message;
 public class User {
     private String name;
     private Integer age;
+    public User(){}
+    public User(String name,int age){
+        this.name = name;
+        this.age = age;
+    }
 
     public Integer getAge() {
         return age;

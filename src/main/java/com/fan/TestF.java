@@ -1,13 +1,22 @@
 package com.fan;
 
+import com.msgpack.User;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class TestF {
 
     public static void main(String[] args) {
-        TestF.printMsg("111",222,"aaaa","2323.4",new GenTest<String>());
+        List<User> list = Arrays.asList(new User("zhangsan", 18),
+                new User("lisi", 21),
+                new User("wangwu", 19),
+                new User("zhaoliu", 20));
+        list.stream().collect(Collectors.toCollection(ArrayList::new)).forEach(System.out::println);
+        System.out.println(list.stream().map(x -> x.getAge()).reduce(Integer::sum));
+        System.out.println(list.stream().map(x -> x.getAge()).reduce(1, Integer::sum));
     }
-    public static  <T> void printMsg( T... args){
-        for(T t : args){
-            System.out.println(("泛型测试"+"t is " + t));
-        }
-    }
+
 }
