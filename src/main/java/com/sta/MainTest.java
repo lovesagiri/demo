@@ -26,8 +26,19 @@ public class MainTest {
         date.stream().forEach(index->{
             Arrays.stream(TestEnum.values())
                     .filter(tem->!tem.equals(TestEnum.UNKNOWN))
-                    .forEach();
+                    .forEach(type->{
+                        Result result = resultCols
+                                .parallelStream()
+                                .filter(data -> data.index.equals(index) && data.testEnum.equals(type))
+                                .findAny().orElse(null);
+                        if (result != null){
+                            results.add(result);
+                        }else{
+                            results.add(new Result(index,0L,type));
+                        }
+                    });
         });
+        System.out.println(results);
 
     }
 
